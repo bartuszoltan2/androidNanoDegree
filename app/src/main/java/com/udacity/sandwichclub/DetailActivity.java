@@ -1,9 +1,13 @@
 package com.udacity.sandwichclub;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -14,13 +18,25 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
+    TextView mAlsoKnownTv;
+    TextView mIngredients;
+    TextView mDescriptionTv;
+    TextView mOriginTv;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+
         ImageView ingredientsIv = findViewById(R.id.image_iv);
+
+        mAlsoKnownTv = (TextView) findViewById(R.id.also_known_tv);
+        mIngredients = (TextView) findViewById(R.id.ingredients_tv);
+        mOriginTv = (TextView) findViewById(R.id.origin_tv);
+        mDescriptionTv = (TextView) findViewById(R.id.description_tv);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -43,7 +59,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +72,16 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void populateUI(Sandwich sandwich) {
 
+        if (sandwich.getAlsoKnownAs() != null) {
+            sandwich.getAlsoKnownAs().stream().forEach(t -> mAlsoKnownTv.append(t + "\n"));
+        }
+        if(sandwich.getIngredients()!=null){
+            sandwich.getIngredients().stream().forEach(t -> mIngredients.append(t + "\n"));
+        }
+        mDescriptionTv.setText(sandwich.getDescription());
+        mOriginTv.setText(sandwich.getPlaceOfOrigin());
     }
 }
