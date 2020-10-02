@@ -17,29 +17,27 @@ public class JsonUtils {
         try {
             JSONObject sandwichJson = new JSONObject(json);
 
-
             JSONObject nameJson = sandwichJson.getJSONObject("name");
             sandwich.setMainName(nameJson.getString("mainName"));
-
 
             sandwich.setPlaceOfOrigin(sandwichJson.getString("placeOfOrigin"));
             sandwich.setDescription(sandwichJson.getString("description"));
             sandwich.setImage(sandwichJson.getString("image"));
+            sandwich.setImage(sandwichJson.getString("image"));
 
             JSONArray alsoKnownAsJsonArray = nameJson.getJSONArray("alsoKnownAs");
-            List alsoKnownAs = new ArrayList<>();
+            List<String> alsoKnownAs = new ArrayList<>();
             for (int i = 0; i < alsoKnownAsJsonArray.length(); i++) {
                 alsoKnownAs.add(alsoKnownAsJsonArray.getString(i));
             }
             sandwich.setAlsoKnownAs(alsoKnownAs);
 
             JSONArray ingredientsJsonArray = sandwichJson.getJSONArray("ingredients");
-            List ingredients = new ArrayList<>();
+            List<String> ingredients = new ArrayList<>();
             for (int i = 0; i < ingredientsJsonArray.length(); i++) {
                 ingredients.add(ingredientsJsonArray.getString(i));
             }
             sandwich.setIngredients(ingredients);
-            sandwich.setImage(sandwichJson.getString("image"));
 
         } catch (JSONException e) {
             e.printStackTrace();

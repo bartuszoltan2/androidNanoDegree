@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,15 +13,18 @@ import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
+import java.util.stream.Collectors;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
+    private static final String UNKNOWN = "Unknown";
     private static final int DEFAULT_POSITION = -1;
-    TextView mAlsoKnownTv;
-    TextView mIngredients;
-    TextView mDescriptionTv;
-    TextView mOriginTv;
-
+    private ImageView ingredientsIv;
+    private TextView mAlsoKnownTv;
+    private TextView mIngredients;
+    private TextView mDescriptionTv;
+    private TextView mOriginTv;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -30,9 +32,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-
-        ImageView ingredientsIv = findViewById(R.id.image_iv);
-
+        ingredientsIv = findViewById(R.id.image_iv);
         mAlsoKnownTv = (TextView) findViewById(R.id.also_known_tv);
         mIngredients = (TextView) findViewById(R.id.ingredients_tv);
         mOriginTv = (TextView) findViewById(R.id.origin_tv);
@@ -75,13 +75,28 @@ public class DetailActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void populateUI(Sandwich sandwich) {
 
-        if (sandwich.getAlsoKnownAs() != null) {
-            sandwich.getAlsoKnownAs().stream().forEach(t -> mAlsoKnownTv.append(t + "\n"));
+        if (sandwich.getAlsoKnownAs() != null && sandwich.getAlsoKnownAs().size() != 0) {
+            mAlsoKnownTv.setText(sandwich.getAlsoKnownAs().stream().collect(Collectors.joining(", ")));
+        } else {
+            mAlsoKnownTv.setText(UNKNOWN);
         }
-        if(sandwich.getIngredients()!=null){
-            sandwich.getIngredients().stream().forEach(t -> mIngredients.append(t + "\n"));
+
+        if (sandwich.getIngredients() != null && sandwich.getIngredients().size() != 0) {
+            mIngredients.setText(sandwich.getIngredients().stream().collect(Collectors.joining(", ")));
+        } else {
+            mIngredients.setText(UNKNOWN);
         }
-        mDescriptionTv.setText(sandwich.getDescription());
-        mOriginTv.setText(sandwich.getPlaceOfOrigin());
+
+        if (sandwich.getDescription() != null && sandwich.getDescription().length() != 0) {
+            mDescriptionTv.setText(sandwich.getDescription());
+        } else {
+            mDescriptionTv.setText(UNKNOWN);
+        }
+
+        if (sandwich.getPlaceOfOrigin() != null && sandwich.getPlaceOfOrigin().length() != 0) {
+            mOriginTv.setText(sandwich.getPlaceOfOrigin());
+        } else {
+            mOriginTv.setText(UNKNOWN);
+        }
     }
 }
