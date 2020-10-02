@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
-    private static final String UNKNOWN = "Unknown";
     private static final int DEFAULT_POSITION = -1;
+    private static final String UNKNOWN = "Unknown";
     private ImageView ingredientsIv;
     private TextView mAlsoKnownTv;
     private TextView mIngredients;
